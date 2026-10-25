@@ -1,0 +1,12 @@
+# Isolated test stack:
+#   docker compose -p threejs-visual-project-test -f docker-compose.yml -f docker-compose.test.yml up -d --build
+# Renames the container, publishes the UI on 127.0.0.1:3900 only and keeps it off the external
+# network, so it never clashes with the live app.
+services:
+  frontend:
+    container_name: threejs-lab-test-frontend
+    ports: !override
+      - "127.0.0.1:3900:80"
+    restart: "no"
+    networks: !override
+      - default

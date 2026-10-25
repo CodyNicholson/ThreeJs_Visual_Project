@@ -1,0 +1,9 @@
+{
+  "name": "threejs-lab-e2e",
+  "private": true,
+  "type": "module",
+  "description": "Runs every Three.js lab demo in headless Chromium (software WebGL 2) and fails on any failed self-check",
+  "dependencies": {
+    "playwright": "1.64.1"
+  }
+}

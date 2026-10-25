@@ -1,0 +1,32 @@
+# Three.js runs entirely in the browser, so this lab has no backend: one nginx container serves the
+# built React app and every demo runs real Three.js code in the visitor's page (WebGL2 / WebGPU).
+# Secrets live in the git-ignored .env next to this file.
+services:
+  # Production build served by unprivileged nginx on :80
+  frontend:
+    build:
+      context: ./frontend
+      target: runtime
+    container_name: rixus-frontend
+    ports:
+      # Localhost only: Docker's iptables rules bypass ufw, so a bare "3000:80" would be public
+      - "127.0.0.1:3000:80"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 100
+    networks:
+      - tunnel-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+networks:
+  tunnel-net:
+    external: true
